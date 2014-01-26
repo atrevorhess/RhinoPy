@@ -8,6 +8,18 @@ class Object:
     def __del__(self):
         self.delete()
 
+    def __get__(self):
+        return self.GUID
+        
+    def __getattr__(self):
+        return self.GUID
+
+    def __repr__(self):
+        return self.GUID
+
+    def __str__(self):
+        return self.GUID
+
     def color(self, color=None):
         return rs.ObjectColor(self.GUID, color)
         

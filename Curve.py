@@ -4,7 +4,7 @@ from Point import Point
 
 class Curve(Object):
     def __init__(self, points, degree=3):
-        self.GUID = rs.AddCurve(points, degree=degree)
+        self.GUID = rs.AddCurve(points, degree=degree, hidden=False, locked=False, selected=False)
         # Object.__init__(self, rs.AddCurve(points, degree=degree))
         #LineFitFromPoints Contructor
 
