@@ -9,6 +9,9 @@ class Arc(Curve):
     def _add():
         pass
 
+    def _isArc(self, obj, segment_index=-1):
+        return rs.IsArc(obj, segment_index)
+
     def angle(self, segment_index=-1):
         return rs.ArcAngle(self.GUID, segment_index)
 

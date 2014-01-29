@@ -9,6 +9,9 @@ class Circle(Curve):
     def _add(self, plane_or_center, radius):
         return rs.AddCircle(plane_or_center, radius)
 
+    def IsCircle(self, obj, segment_index=-1):
+        return rs.IsCircle(obj, segment_index)
+
     def centerPoint(self, segment_index=-1, return_plane=False):
         if return_plane == True:
             return rs.CircleCenterPoint(self.GUID, segment_index, return_plane)

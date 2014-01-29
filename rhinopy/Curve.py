@@ -1,5 +1,6 @@
 import rhinoscriptsyntax as rs
 from Object import Object
+from Plane import Plane
 from Point import Point
 
 class Curve(Object):
@@ -7,6 +8,9 @@ class Curve(Object):
         self.GUID = rs.AddCurve(points, degree=degree, hidden=False, locked=False, selected=False)
         # Object.__init__(self, rs.AddCurve(points, degree=degree))
         #LineFitFromPoints Contructor
+
+    def _isCurve(self, obj):
+        return rs.IsCurve(obj)
 
     def fillet(self, curve_id, radius=1.0, base_point0=None, base_point1=None):
         #?? Returns GUID of new fillet, should the fillet be a seperate object ??
@@ -88,6 +92,7 @@ class Curve(Object):
     def interesection(self, object):
         """
         Covers all the intersect functions. Test the object for type (brep, curve, surface, sphere, etc) then execute the corresponding intersection function
+        Implement all intersection functions as internal psuedo private methods
         """
         pass
 
@@ -204,17 +209,6 @@ class Curve(Object):
     def insertKnot(self, parameter, symetrical=False):
         return rs.InsertCurveKnot(self.GUID, parameter, symetrical)
 
-    """
-    def isArc(self):
-        pass
-
-    def isCircle(self):
-        pass
-
-    def isCurve(self):
-        pass
-    """
-
     def isClosable(self, tolerance=None):
         return rs.IsCurveClosable(self.GUID, tolerance)
 
@@ -232,11 +226,6 @@ class Curve(Object):
 
     def isPlanar(self, segment_index):
         return rs.IsCurvePlanar(self.GUID, segment_index)
-
-    """
-    def isLine(self):
-        pass
-    """
 
     def isPointOnCurve(self, point, segment_index=-1):
         return rs.IsPointOnCurve(self.GUID, point, segment_index=-1)

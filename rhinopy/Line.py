@@ -1,5 +1,6 @@
 import rhinoscriptsyntax as rs
 from Object import Object
+import CurveTools
 
 class Line(Object):
     def __init__(self, points, hidden=False, locked=False, selected=False):
@@ -7,7 +8,58 @@ class Line(Object):
 
     def _add(self, points):
         return rs.AddLine(points[0], points[1])
-        
+    
+    def _isLine(self, rhino_object):
+        return rs.IsLine(rhino_object.GUID)
+
+    def __get__(self, instance, owner):
+        return self.GUID
+
+    def __set__(self, instance, value):
+        pass
+
+    def __delete__(self, instance):
+        pass
+
+    def __add__(self, other): #Addition
+        """
+        if curve: Join Curve
+        if number: extendLength
+        """
+        pass
+
+    def __iadd__(self, other): #Addition with assignment
+        """
+        if curve: Join Curve
+        if number: extendLength
+        return new curve
+        """
+        pass
+
+    def __sub__(self, other): #Subtraction
+        pass
+
+    def __isub__(self, other): #Subtraction with assignment
+        pass
+
+    def __mul__(self, other): #Multiplication
+        pass
+
+    def __imul__(self, other): #Multiplication with assignment
+        pass
+
+    def __div__(self, other): #Division
+        """
+        Divide Curve
+        """
+        pass
+
+    def __idiv__(self, other): #Division with assignment
+        pass
+
+    def __len__(self): #length
+        return CurveTools.length(self.GUID)
+
     def angle(self, line):
         return rs.Angle2(self.GUID, line.GUID)
 
