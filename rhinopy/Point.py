@@ -55,3 +55,7 @@ class Point(Object):
             return Point(rs.ProjectPointToMesh(self.GUID, projection_object, direction))
         if rs.IsSurface(projection_object):
             return Point(rs.ProjectPointToMesh(self.GUID, projection_object, direction))
+
+class PolarPoint(Point):
+    def __init__(self, origin=[0, 0, 0], angle_degrees, distance, plane=None, hidden=False, locked=False, selected=False):
+        self.GUID = rs.Polar(origin, angle_degrees, distance, plan=None)

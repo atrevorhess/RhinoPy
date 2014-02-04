@@ -286,8 +286,8 @@ class Curve(Object):
     def rebuild(self, degree=3, point_count=10):
         return rs.RebuildCurve(self.GUID, degree, point_count)
 
-    def removeKnot(self):
-        pass
+    def removeKnot(self, parameter):
+        return rs.RemoveCurveKnot(self.GUID, parameter)
 
     def reverse(self):
         return rs.ReverseCurve(self.GUID)
@@ -300,3 +300,24 @@ class Curve(Object):
 
     def trim(self, interval, delete_input=True):
         return rs.TrimCurve(self.GUID, interval, delete_input)
+
+class FilletCurve(Curve):
+    def __init__(self, curves, parameters, reverses, continuities):
+        self.GUID = self._add(curves, parameters, reverses, continuities)
+
+    def _add(self, curves, parameters, reverses, continuities):
+        return rs.BlendCurve(curves, parameters, reverses, continuities)
+
+class InterpCurve(Curve):
+    def __init__(self, points, degree=3, knotstyle=0, start_tangent=None, end_tangent=None):
+        self.GUID = self._add(points, degree, knotstyle, start_tangent, end_tangent)
+
+    def _add(self, points, degree=3, knotstyle=0, start_tangent=None, end_tangent=None):
+        return rs.AddInterpCurve(points, degree, knotstyle, start_tangent, end_tangent)
+
+class PtCurve(Curve):
+    def __init__(self, pt1, pt2, pt3):
+        self.GUID = self._add(pt1, pt2, pt3)
+        
+    def _add(self, pt1, pt2, pt3):
+        return rs.AddCurve3Pt(pt1, pt2, pt3)

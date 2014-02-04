@@ -21,42 +21,6 @@ class Line(Object):
     def __delete__(self, instance):
         pass
 
-    def __add__(self, other): #Addition
-        """
-        if curve: Join Curve
-        if number: extendLength
-        """
-        pass
-
-    def __iadd__(self, other): #Addition with assignment
-        """
-        if curve: Join Curve
-        if number: extendLength
-        return new curve
-        """
-        pass
-
-    def __sub__(self, other): #Subtraction
-        pass
-
-    def __isub__(self, other): #Subtraction with assignment
-        pass
-
-    def __mul__(self, other): #Multiplication
-        pass
-
-    def __imul__(self, other): #Multiplication with assignment
-        pass
-
-    def __div__(self, other): #Division
-        """
-        Divide Curve
-        """
-        pass
-
-    def __idiv__(self, other): #Division with assignment
-        pass
-
     def __len__(self): #length
         return CurveTools.length(self.GUID)
 
