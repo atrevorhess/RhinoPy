@@ -1,6 +1,10 @@
 import rhinoscriptsyntax as rs
 from Curve import Curve
 
+
+SrfPt
+SrfPtGrid
+
 class Surface:
     def __init__(self):
         self.GUID = self._add()
@@ -52,6 +56,12 @@ class Surface:
 
     def capPlanarHoles(self):
         return rs.CapPlanarHoles(self.GUID)
+
+    def contourCrvs(self, points_or_plane, interval=None):
+        return [Curve(curve) for curve in rs.AddSrfContourCrvs(self.GUID, points_or_plane, interval)]
+
+    def controlPtGrid(self):
+        pass
 
     def duplicateEdgeCurves(self, select=False):
         return [Curve(curve) for curve in rs.DuplicateEdgeCurves(self.GUID, select)]
@@ -346,13 +356,6 @@ class Sphere(Surface):
 
     def IntersectSpheres(self):
         pass
-
-"""
-SrfContourCrvs
-SrfControlPtGrid
-SrfPt
-SrfPtGrid
-"""
 
 #Combine the two sweeps in future revisions
 class Sweep1(Surface):

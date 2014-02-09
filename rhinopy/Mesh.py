@@ -1,141 +1,156 @@
 import rhinoscriptsyntax as rs
 from Object import Object
+from Curve import Curve
+from Point import Point
+from Vector import Vector
 
 class Mesh(Object):
     def __init__(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
-        self.GUID = self._draw(vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
+        self.GUID = self._add(vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
     
-    def _draw(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
-        return rs.AddMesh ( vertices, face_vertices, vertex_normals, texture_coordinatese, vertex_colors)
+    def _add(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
+        return rs.AddMesh ( vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
 
-    def AddPlanarMesh(self):
-        pass
+    def _isMesh(self, obj):
+        return rs.IsMesh(obj.GUID)
 
     def CurveMeshIntersection(self):
         pass
 
-    def DisjointMeshCount(self):
-        pass
+    def disjointMeshCount(self):
+        return rs.DisjointMeshCount(self.GUID)
 
-    def DuplicateMeshBorder(self):
-        pass
+    def duplicateMeshBorder(self):
+        return [Curve(curve) for curve in rs.DuplicateMeshBorder(self.GUID)]
 
-    def ExplodeMeshes(self):
-        pass
+    def explode(self):
+        return [Mesh(mesh) for mesh in rs.ExplodeMeshes(self.GUID)]
 
-    def IsMesh(self):
-        pass
+    def isClosed(self):
+        return rs.IsMeshClosed(self.GUID)
 
-    def IsMeshClosed(self):
-        pass
+    def isManifold(self):
+        return rs.IsMeshManifold(self.GUID)
 
-    def IsMeshManifold(self):
-        pass
+    def isPointOnMesh(self, point):
+        return rs.IsPointOnMesh(self.GUID, point.GUID)
 
-    def IsPointOnMesh(self):
-        pass
+    def join(self, meshes, delete_input=False):
+        mesh_id_list = [mesh.GUID for mesh in meshes]
+        joined_mesh_guid = rs.JoinMeshes(mesh_id_list, delete_input)
+        if delete_input:
+            pass
+        return Mesh(joined_mesh_guid)
 
-    def JoinMeshes(self):
-        pass
+    def area(self):
+        return rs.MeshArea(self.GUID)
 
-    def MeshArea(self):
-        pass
+    def areaCentroid(self):
+        return Point(rs.MeshAreaCentroid(self.GUID))
 
-    def MeshAreaCentroid(self):
-        pass
+    def booleanDifference(self, difference_mesh, delete_input=True):
+        return [Mesh(mesh) for mesh in rs.MeshBooleanDifference(self.GUID, difference_mesh.GUID, delete_input)]
 
-    def MeshBooleanDifference(self):
-        pass
+    def booleanIntersection(self, intersection_mesh, delete_input=True):
+        return [Mesh(mesh) for mesh in rs.MeshBooleanIntersection(self.GUID, intersection_mesh.GUID, delete_input)]
 
-    def MeshBooleanIntersection(self):
-        pass
+    def booleanSplit(self, split_mesh, delete_input=True):
+        return [Mesh(mesh) for mesh in rs.MeshBooleanSplit(self.GUID, split_mesh.GUID, delete_input)]
 
-    def MeshBooleanSplit(self):
-        pass
+    def booleanUnion(self, union_mesh, delete_input=True):
+        return [Mesh(mesh) for mesh in rs.MeshBooleanUnion(self.GUID, union_mesh.GUID, delete_input)]
 
-    def MeshBooleanUnion(self):
-        pass
+    def closestPoint(self, point, maximum_distance):
+        return rs.MeshClosestPoint(self.GUID, point, maximum_distance)
 
-    def MeshClosestPoint(self):
-        pass
+    def faceCenters(self):
+        return [Point(point) for point in rs.MeshFaceCenters(self.GUID)]
 
-    def MeshFaceCenters(self):
-        pass
+    def faceCount(self):
+        return rs.MeshFaceCount(self.GUID)
 
-    def MeshFaceCount(self):
-        pass
+    def faceNormals(self):
+        return [Vector(vector) for vector in rs.MeshFaceNormals(self.GUID)]
 
-    def MeshFaceNormals(self):
-        pass
+    def faces(self, face_type=True):
+        return [Point(point) for point in rs.MeshFaces(self.GUID, face_type)]
 
-    def MeshFaces(self):
-        pass
+    def faceVertices(self):
+        return rs.MeshFaceVerticies(self.GUID)
 
-    def MeshFaceVertices(self):
-        pass
+    def hasFaceNormals(self):
+        return rs.MeshHasFaceNormals(self.GUID)
 
-    def MeshHasFaceNormals(self):
-        pass
+    def hasTextureCoordinates(self):
+        return rs.MeshHasTextureCoordinates(self.GUID)
 
-    def MeshHasTextureCoordinates(self):
-        pass
+    def hasVertexColors(self):
+        return rs.MeshHasVertexColors(self.GUID)
 
-    def MeshHasVertexColors(self):
-        pass
+    def hasVertexNormals(self):
+        return rs.MeshHasVertexNormals(self.GUID)
 
-    def MeshHasVertexNormals(self):
-        pass
+    def MeshMeshIntersection(self, mesh, tolerance=None):
+        return rs.MeshMeshInteresection(self.GUID, mesh.GUID, tolerance)
 
-    def MeshMeshIntersection(self):
-        pass
+    def nakedEdgePoints(self):
+        return rs.MeshNakedEdgePoints(self.GUID)
 
-    def MeshNakedEdgePoints(self):
-        pass
+    def offset(self, distance):
+        return Mesh(rs.MeshOffest(self.GUID, distance))
 
-    def MeshOffset(self):
-        pass
+    def outline(self, view=None):
+        # Returns Polyline Curves if successful
+        return rs.MeshOutline(self.GUID, view)
 
-    def MeshOutline(self):
-        pass
+    def quadCount(self):
+        return rs.MeshQuadCount(self.GUID)
 
-    def MeshQuadCount(self):
-        pass
+    def quadsToTriangles(self):
+        return rs.MeshQuadsToTrinagles(self.GUID)
 
-    def MeshQuadsToTriangles(self):
-        pass
+    def toNurb(self, trimmed_triangles=True, delete_input=False):
+        """
+        Warning: This method converts each polygon face to a NURBS surface. It is not meant to convert entire mesh models to NURBS models and there is, in fact, no simple way to accomplish this.
+        """
+        return rs.MeshToNurb(self.GUID, trimmed_triangles, delete_input)
 
-    def MeshToNurb(self):
-        pass
+    def triangleCount(self):
+        return rs.MeshTriangleCount(self.GUID)
 
-    def MeshTriangleCount(self):
-        pass
+    def vertexColors(self, colors=0):
+        return rs.MeshVertexColors(self.GUID, colors)
 
-    def MeshVertexColors(self):
-        pass
+    def vertexCount(self):
+        return rs.MeshVertexCount(self.GUID)
 
-    def MeshVertexCount(self):
-        pass
+    def vertexFaces(self, vertex_index):
+        return rs.MeshVertexFaces(self.GUID, vertex_index)
 
-    def MeshVertexFaces(self):
-        pass
+    def vertexNormals(self):
+        return [Vector(vector) for vector in rs.MeshVertexNormals(self.GUID)]
 
-    def MeshVertexNormals(self):
-        pass
+    def vertices(self):
+        return [Point(point) for point in rs.MeshVertices(self.GUID)]
 
-    def MeshVertices(self):
-        pass
+    def volume(self):
+        return rs.MeshVolume(self.GUID)
 
-    def MeshVolume(self):
-        pass
+    def volumeCentroid(self):
+        return Point(rs.MeshVolumeCentroid(self.GUID))
 
-    def MeshVolumeCentroid(self):
-        pass
+    def pullCurve(self, curve):
+        return Curve(rs.PullCurveToMesh(self.GUID, curve.GUID))
 
-    def PullCurveToMesh(self):
-        pass
+    def splitDisjoint(self, delete_input=False):
+        return [Mesh(mesh) for mesh in rs.SplitDisjointMesh(self.GUID, delete_input)]
 
-    def SplitDisjointMesh(self):
-        pass
+    def unifyNormals(self):
+        return rs.UnifyMeshNormals(self.GUID)
 
-    def UnifyMeshNormals(self):
-        pass
+class PlanarMesh(Mesh):
+    def __init__(self, planar_curve, delete_input=False):
+        self.GUID = self._add(planar_curve, delete_input)
+
+    def _add (self, planar_curve, delete_input=False):
+        return rs.AddPlanarMesh(planar_curve, delete_input)
