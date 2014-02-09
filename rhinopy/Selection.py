@@ -4,71 +4,71 @@ class Selection:
     def __init__(self):
         pass
 
-    def AllObjects(self):
-        pass
+    def selectAll(self, select=False, include_lights=False, include_grips=False):
+        return rs.AllObjects(select, include_lights, include_grips)
 
-    def FirstObject(self):
-        pass
+    def selectFirst(self, select=False, include_lights=False, include_grips=False):
+        return rs.FirstObject(select, include_lights, include_grips)
 
-    def GetCurveObject(self):
-        pass
+    def getCurve(self, message=None, preselect=False, select=False):
+        return rs.GetCurveObject(message, preselect, select)
 
-    def GetObject(self):
-        pass
+    def getObject(self, message=None, selection_filter=0, preselect=False, select=False, custom_filter=None, subobjects=False):
+        return rs.GetObject(message, selection_filter, preselect, select=False, custom_filter, subobjects)
 
-    def GetObjectEx(self):
-        pass
+    def getObjectEx(self, message=None, selection_filter=0, preselect=False, select=False, objects=None):
+        return rs.GetObjectEx(message, selection_filter, preselect, select, objects)
 
-    def GetObjects(self):
-        pass
+    def getObjects(self, message=None, selection_filter=0, group=True, preselect=False, select=False, objects=None, minimum_count=1, maximum_count=0, custom_filter=None):
+        return rs.GetObjects(message, selection_filter, group, preselect, select, objects, minimum_count, maximum_count, custom_filter)
 
-    def GetObjectsEx(self):
-        pass
+    def getObjectsEx(self, message=None, selection_filter=0, group=True, preselect=False, select=False, objects=None):
+        return rs.GetObjectsEx(message, selection_filter, group, preselect, select, objects)
 
-    def GetPointCoordinates(self):
-        pass
+    def getPointCoordinates(self, message="selectpoints", preselect=False):
+        return rs.GetPointCoordinates(message, preselect)
 
-    def GetSurfaceObject(self):
-        pass
+    def getSurfaceObject(self, message="select surface", preselect=False, select=False):
+        return rs.GetSurfaceObject(message, preselect, select)
 
-    def HiddenObjects(self):
-        pass
+    def hiddenObjects(self, include_lights=False, include_grips=False):
+        return rs.hiddenObjects(include_lights, include_grips)
 
-    def InvertSelectedObjects(self):
-        pass
+    def invertSelectedObjects(self, include_lights=False, include_grips=False):
+        return rs.InvertSelectedObjects(include_lights, include_grips)
 
-    def LastCreatedObjects(self):
-        pass
+    def lastCreatedObjects(self, select=False):
+        return rs.LastCreatedObjects(select)
 
-    def LastObject(self):
-        pass
+    def lastObject(self, select=False, include_lights=False, include_grips=False):
+        return rs.LastObject(select, include_lights, include_grips)
 
-    def LockedObjects(self):
-        pass
+    def lockedObjects(self, include_lights=False, include_grips=False):
+        return rs.LockedObjects(include_lights, include_grips)
 
-    def NextObject(self):
-        pass
+    def nextObject(self, object_id, select=False, include_lights=False, include_grips=False):
+        return rs.NextObject(object_id.GUID, select, include_lights, include_grips)
 
-    def NormalObjects(self):
-        pass
+    def normalObjects(self, include_lights=False, include_grips=False):
+        return rs.NormalObjects(include_lights, include_grips)
 
-    def ObjectsByColor(self):
-        pass
+    def byColor(self, color, select=False, include_lights=False):
+        return rs.ObjectsByColor(color, select, include_lights)
 
-    def ObjectsByGroup(self):
-        pass
+    def byGroup(self, group_name, select=False):
+        return rs.ObjectsByGroup(group_name, select)
 
-    def ObjectsByLayer(self):
-        pass
+    def byLayer(self, layer_name, select=False):
+        return rs.ObjectsByLayer(layer_name, select)
 
-    def ObjectsByName(self):
-        pass
+    def byName(self, name, select=False, include_lights=False):
+        return rs.ObjectsByName(name, select, include_lights)
 
-    def ObjectsByType(self):
-        pass
+    def byType(self, type, select=False, state=0):
+        return rs.ObjectsByType(type, select, state)
 
-    def SelectedObjects(self):
-        pass
+    def selectedObjects(self, include_lights=False, include_grips=False):
+        return rs.SelectedObjects(include_lights=False, include_grips=False)
 
-    def UnselectAllObjects(self):
-        pass
+    def unselectAllObjects(self):
+        return rs.UnselectAllObjects()
