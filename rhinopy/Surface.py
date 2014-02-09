@@ -150,22 +150,22 @@ class Surface:
     def shortPath(self, start_point, end_point):
         return Curve(rs.ShortPath(self.GUID, start_point, end_point))
 
-    def shrink(self):
+    def shrink(self, create_copy=False):
         # test for isSurfaceTrimmed
-        pass
+        return rs.ShrinkTrimmedSurface(self.GUID, create_copy)
 
-    def split(self):
+    def split(self, cutter, delete_input=False):
         # check for isBrep
-        pass
+        return rs.SplitBrep(self.GUID, cutter, delete_input)
 
     def area(self):
-        pass
+        return rs.SurfaceArea(self.GUID)
 
-    def centroid(self):
-        pass
+    def areaCentroid(self):
+        return rs.SurfaceAreaCentroid(self.GUID)
 
     def areaMoments(self):
-        pass
+        return rs.SurfaceAreaMoment(self.GUID)
 
     """
     Cone method
@@ -177,8 +177,8 @@ class Surface:
         # Duplicate Method
         # pass
 
-    def curvature(self):
-        pass
+    def curvature(self, parameter):
+        return rs.SurfaceCurvature(self.GUID, parameter)
 
     """
     Cylinder Method
@@ -186,74 +186,77 @@ class Surface:
         pass
     """
 
-    def degree(self):
-        pass
+    def degree(self, direction=2):
+        return rs.SurfaceDegree(self.GUID, direction)
 
-    def domain(self):
-        pass
+    def domain(self, direction):
+        return rs.SurfaceDomain(self.GUID, direction)
 
-    def editPoints(self):
-        pass
+    def editPoints(self, return_parameters=False, return_all=True):
+        return rs.SurfaceEditPoints(self.GUID, return_parameters, return_all)
 
     # def evaluate(self):
     #     Duplicate Method
     #     pass
 
-    def frame(self):
-        pass
+    def SurfaceEvaluate(self, parameter, derivative):
+        return rs.SurfaceEvaluate(self.GUID, parameter, derivative)
 
-    def isocurveDensity(self):
-        pass
+    def frame(self, uv_parameter):
+        return rs.SurfaceFrame(self.GUID, uv_parameter)
+
+    def isocurveDensity(self, density=None):
+        return rs.SurfaceIsocurveDensity(self.GUID, density)
 
     def knotCount(self):
-        pass
+        return rs.SurfaceKnotCount(self.GUID)
 
-    def knots(self):
-        pass
+    def knots(self, uv_parameter):
+        return rs.SurfaceKnots(self.GUID)
 
-    def normal(self):
-        pass
+    def normal(self, uv_parameter):
+        return rs.SurfaceNormal(self.GUID, uv_parameter)
 
-    def normalizedParameter(self):
-        pass
+    def normalizedParameter(self, parameter):
+        return rs.SurfaceNormalizedParameter(self.GUID, parameter)
 
-    def parameter(self):
-        pass
+    def parameter(self, parameter):
+        return rs.SurfaceParameter(self.GUID, parameter)
 
     def pointCount(self):
-        pass
+        return rs.SurfacePointCount(self.GUID)
 
-    def points(self):
-        pass
+    def points(self, return_all=True):
+        return rs.SurfacePoints(self.GUID, return_all=True)
 
     def torus(self):
-        pass
+        return rs.SurfaceTorus(self.GUID)
 
     def volume(self):
         #test isClosed
-        pass
+        return rs.SurfaceVolume(self.GUID)
 
     def volumeCentroid(self):
         # combine with area centroid
         # test isClosed or isBrep
-        pass
+        return rs.SurfaceVolumeCentroid(self.GUID)
 
     def volumeMoments(self):
         #combine with area moments
-        pass
+        return rs.SurfaceVolumeMoments(self.GUID)
 
     def weights(self):
-        pass
+        return rs.SurfaceWeights(self.GUID)
 
-    def TrimBrep(self):
+    def TrimBrep(self, cutter, tolerance=None):
         # test isBrep
-        pass
+        return rs.TrimBrep(self.GUID, cutter, tolerance)
 
-    def trim(self):
-        pass
+    def trim(self, direction, interval, delete_input=False):
+        return rs.TrimSurface(self.GUID, direction, interval, delete_input)
 
-    def unroll(self):
-        pass
+    def unroll(self, explode=False, following_geometery=None):
+        return rs.UnrollSurface(self.GUID, explode, following_geometery)
 
 #Abstract Surface Classes
 

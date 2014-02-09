@@ -315,6 +315,13 @@ class InterpCurve(Curve):
     def _add(self, points, degree=3, knotstyle=0, start_tangent=None, end_tangent=None):
         return rs.AddInterpCurve(points, degree, knotstyle, start_tangent, end_tangent)
 
+class NurbsCurve(Curve):
+    def __init__(self, points, knots, degree, weights=None):
+        self.GUID = self._add(points, knots, degree, weights)
+
+    def _add(self, points, knots, degree, weights=None):
+        return rs.AddNurbsCurve(points, knots, degree, weights)
+
 class PtCurve(Curve):
     def __init__(self, pt1, pt2, pt3):
         self.GUID = self._add(pt1, pt2, pt3)

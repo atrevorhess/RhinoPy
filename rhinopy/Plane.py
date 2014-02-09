@@ -45,11 +45,24 @@ def PlaneTransform(self, xform):
 def RotatePlane(self, angle_degrees, axis):
     return rs.RotatePlane(self.GUID, angle_degrees, axis)
 
-def WorldXYPlane(self):
-    pass
+class WorldXYPlane(Plane):
+    def __init__(self):
+        self.GUID = self._add(self)
 
-def WorldYZPlane(self):
-    pass
+    def _add(self):
+        return rs.WorldXYPlane()
 
-def WorldZXPlane(self):
-    pass
+class WorldYZPlane(Plane):
+    def __init__(self):
+        self.GUID = self._add(self)
+
+    def _add(self):
+        return rs.WorldYZPlane()
+
+class WorldZXPlane(Plane):
+    def __init__(self):
+        self.GUID = self._add(self)
+
+    def _add(self):
+        return rs.WorldZXPlane()
+

@@ -6,8 +6,8 @@ class Arc(Curve):
     def __init__(self, plane, radius, degree, hidden=False, locked=False, selected=False):
         self.GUID = self._add(plane, radius, degree)
 
-    def _add():
-        pass
+    def _add(self, plane, radius, degree):
+        return rs.AddArc(plane, radius, degree)
 
     def _isArc(self, obj, segment_index=-1):
         return rs.IsArc(obj, segment_index)
