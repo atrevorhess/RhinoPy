@@ -5,7 +5,10 @@ from Curve import Curve
 SrfPt
 SrfPtGrid
 
-class Surface:
+class SurfaceObject(Object):
+    def __init__(self):
+        Object.__init__(self, guid)
+        
     def __init__(self):
         self.GUID = self._add()
 

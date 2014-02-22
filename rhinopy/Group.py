@@ -13,8 +13,8 @@ class Group:
     
     def addObject(self, objects):
         #add one or multiple objects into the group
-
-    
+        pass
+        
     def delete(self):
         # del self
         return rs.DeleteGroup(self.name)

@@ -1,14 +1,12 @@
 import rhinoscriptsyntax as rs
 from Object import Object
 from Plane import Plane
-from Point import Point
+from Point import PointObject
 
-class Curve(Object):
-    def __init__(self, points, degree=3):
-        self.GUID = rs.AddCurve(points, degree=degree, hidden=False, locked=False, selected=False)
-        # Object.__init__(self, rs.AddCurve(points, degree=degree))
-        #LineFitFromPoints Contructor
-
+class CurveObject(Object):
+    def __init__(self, guid):
+        Object.__init__(self, guid)
+        
     def _isCurve(self, obj):
         return rs.IsCurve(obj)
 
@@ -37,7 +35,7 @@ class Curve(Object):
         [1] - (x,y,z) - +/- error
         """
         centroid, error = rs.CurveAreaCentroid(self.GUID)
-        return Point(centroid), error
+        return PointObject(centroid), error
 
     def arrows(self, arrow_style=None):
         """
@@ -122,7 +120,7 @@ class Curve(Object):
 
     def endPoints(self):
         #return start and end points
-        return [Point(rs.CurveStartPoint(self.GUID)), Point(rs.CurveEndPoint(self.GUID))]
+        return [PointObject(rs.CurveStartPoint(self.GUID)), PointObject(rs.CurveEndPoint(self.GUID))]
 
     def evaluate(self, parameter, index=-1):
         return rs.EvaluateCurve(self.GUID, parameter, index)
@@ -301,30 +299,47 @@ class Curve(Object):
     def trim(self, interval, delete_input=True):
         return rs.TrimCurve(self.GUID, interval, delete_input)
 
-class FilletCurve(Curve):
+class Curve(CurveObject):
+    def __init__(self, points, degree=3):
+        CurveObject.__init__(self, self._add(points, degree))
+
+    def _add(points, degree=3):
+        return rs.AddCurve(points, degree)
+
+class FilletCurve(CurveObject):
     def __init__(self, curves, parameters, reverses, continuities):
-        self.GUID = self._add(curves, parameters, reverses, continuities)
+        CurveObject.__init__(self, self._add(curves, parameters, reverses, continuities))
 
     def _add(self, curves, parameters, reverses, continuities):
         return rs.BlendCurve(curves, parameters, reverses, continuities)
 
-class InterpCurve(Curve):
+class InterpCurve(CurveObject):
     def __init__(self, points, degree=3, knotstyle=0, start_tangent=None, end_tangent=None):
-        self.GUID = self._add(points, degree, knotstyle, start_tangent, end_tangent)
+        CurveObject.__init__(self, self._add(points, degree, knotstyle, start_tangent, end_tangent))
 
     def _add(self, points, degree=3, knotstyle=0, start_tangent=None, end_tangent=None):
         return rs.AddInterpCurve(points, degree, knotstyle, start_tangent, end_tangent)
 
-class NurbsCurve(Curve):
+class NurbsCurve(CurveObject):
     def __init__(self, points, knots, degree, weights=None):
-        self.GUID = self._add(points, knots, degree, weights)
+        CurveObject.__init__(self, self._add(points, knots, degree, weights))
 
     def _add(self, points, knots, degree, weights=None):
         return rs.AddNurbsCurve(points, knots, degree, weights)
 
-class PtCurve(Curve):
+class PolyCurve(CurveObject):
+    def __init__(self):
+        pass
+
+    def _isPolyCurve(self, obj, segment_index=-1):
+        return rs.IsPolyCurve(obj, segment_index)
+
+    def count():
+        pass
+
+class PtCurve(CurveObject):
     def __init__(self, pt1, pt2, pt3):
-        self.GUID = self._add(pt1, pt2, pt3)
+        CurveObject.__init__(self, self._add(pt1, pt2, pt3))
         
     def _add(self, pt1, pt2, pt3):
         return rs.AddCurve3Pt(pt1, pt2, pt3)

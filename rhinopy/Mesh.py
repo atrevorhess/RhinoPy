@@ -1,15 +1,12 @@
 import rhinoscriptsyntax as rs
 from Object import Object
-from Curve import Curve
-from Point import Point
-from Vector import Vector
+from Curve import CurveObject
+from Point import PointObject
+from Vector import VectorObject
 
-class Mesh(Object):
-    def __init__(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
-        self.GUID = self._add(vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
-    
-    def _add(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
-        return rs.AddMesh ( vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
+class MeshObject(Object):
+    def __init__(self, guid):
+        Object.__init__(self, guid)
 
     def _isMesh(self, obj):
         return rs.IsMesh(obj.GUID)
@@ -21,10 +18,10 @@ class Mesh(Object):
         return rs.DisjointMeshCount(self.GUID)
 
     def duplicateMeshBorder(self):
-        return [Curve(curve) for curve in rs.DuplicateMeshBorder(self.GUID)]
+        return [CurveObject(curve) for curve in rs.DuplicateMeshBorder(self.GUID)]
 
     def explode(self):
-        return [Mesh(mesh) for mesh in rs.ExplodeMeshes(self.GUID)]
+        return [MeshObject(mesh) for mesh in rs.ExplodeMeshes(self.GUID)]
 
     def isClosed(self):
         return rs.IsMeshClosed(self.GUID)
@@ -46,34 +43,34 @@ class Mesh(Object):
         return rs.MeshArea(self.GUID)
 
     def areaCentroid(self):
-        return Point(rs.MeshAreaCentroid(self.GUID))
+        return PointObject(rs.MeshAreaCentroid(self.GUID))
 
     def booleanDifference(self, difference_mesh, delete_input=True):
-        return [Mesh(mesh) for mesh in rs.MeshBooleanDifference(self.GUID, difference_mesh.GUID, delete_input)]
+        return [MeshObject(mesh) for mesh in rs.MeshBooleanDifference(self.GUID, difference_mesh.GUID, delete_input)]
 
     def booleanIntersection(self, intersection_mesh, delete_input=True):
-        return [Mesh(mesh) for mesh in rs.MeshBooleanIntersection(self.GUID, intersection_mesh.GUID, delete_input)]
+        return [MeshObject(mesh) for mesh in rs.MeshBooleanIntersection(self.GUID, intersection_mesh.GUID, delete_input)]
 
     def booleanSplit(self, split_mesh, delete_input=True):
-        return [Mesh(mesh) for mesh in rs.MeshBooleanSplit(self.GUID, split_mesh.GUID, delete_input)]
+        return [MeshObject(mesh) for mesh in rs.MeshBooleanSplit(self.GUID, split_mesh.GUID, delete_input)]
 
     def booleanUnion(self, union_mesh, delete_input=True):
-        return [Mesh(mesh) for mesh in rs.MeshBooleanUnion(self.GUID, union_mesh.GUID, delete_input)]
+        return [MeshObject(mesh) for mesh in rs.MeshBooleanUnion(self.GUID, union_mesh.GUID, delete_input)]
 
     def closestPoint(self, point, maximum_distance):
         return rs.MeshClosestPoint(self.GUID, point, maximum_distance)
 
     def faceCenters(self):
-        return [Point(point) for point in rs.MeshFaceCenters(self.GUID)]
+        return [PointObject(point) for point in rs.MeshFaceCenters(self.GUID)]
 
     def faceCount(self):
         return rs.MeshFaceCount(self.GUID)
 
     def faceNormals(self):
-        return [Vector(vector) for vector in rs.MeshFaceNormals(self.GUID)]
+        return [VectorObject(vector) for vector in rs.MeshFaceNormals(self.GUID)]
 
     def faces(self, face_type=True):
-        return [Point(point) for point in rs.MeshFaces(self.GUID, face_type)]
+        return [PointObject(point) for point in rs.MeshFaces(self.GUID, face_type)]
 
     def faceVertices(self):
         return rs.MeshFaceVerticies(self.GUID)
@@ -97,7 +94,7 @@ class Mesh(Object):
         return rs.MeshNakedEdgePoints(self.GUID)
 
     def offset(self, distance):
-        return Mesh(rs.MeshOffest(self.GUID, distance))
+        return MeshObject(rs.MeshOffest(self.GUID, distance))
 
     def outline(self, view=None):
         # Returns Polyline Curves if successful
@@ -128,29 +125,36 @@ class Mesh(Object):
         return rs.MeshVertexFaces(self.GUID, vertex_index)
 
     def vertexNormals(self):
-        return [Vector(vector) for vector in rs.MeshVertexNormals(self.GUID)]
+        return [VectorObject(vector) for vector in rs.MeshVertexNormals(self.GUID)]
 
     def vertices(self):
-        return [Point(point) for point in rs.MeshVertices(self.GUID)]
+        return [PointObject(point) for point in rs.MeshVertices(self.GUID)]
 
     def volume(self):
         return rs.MeshVolume(self.GUID)
 
     def volumeCentroid(self):
-        return Point(rs.MeshVolumeCentroid(self.GUID))
+        return PointObject(rs.MeshVolumeCentroid(self.GUID))
 
     def pullCurve(self, curve):
-        return Curve(rs.PullCurveToMesh(self.GUID, curve.GUID))
+        return CurveObject(rs.PullCurveToMesh(self.GUID, curve.GUID))
 
     def splitDisjoint(self, delete_input=False):
-        return [Mesh(mesh) for mesh in rs.SplitDisjointMesh(self.GUID, delete_input)]
+        return [MeshObject(mesh) for mesh in rs.SplitDisjointMesh(self.GUID, delete_input)]
 
     def unifyNormals(self):
         return rs.UnifyMeshNormals(self.GUID)
 
-class PlanarMesh(Mesh):
+class Mesh(MeshObject):
+    def __init__(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
+        MeshObject.__init__(self, self._add(vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors))
+    
+    def _add(self, vertices, face_vertices, vertex_normals=None, texture_coordinates=None, vertex_colors=None):
+        return rs.AddMesh ( vertices, face_vertices, vertex_normals, texture_coordinates, vertex_colors)
+
+class PlanarMesh(MeshObject):
     def __init__(self, planar_curve, delete_input=False):
-        self.GUID = self._add(planar_curve, delete_input)
+        MeshObject.__init__(self, self._add(planar_curve, delete_input))
 
     def _add (self, planar_curve, delete_input=False):
         return rs.AddPlanarMesh(planar_curve, delete_input)

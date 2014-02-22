@@ -1,11 +1,9 @@
 import rhinoscriptsyntax as rs
+from Object import Object
 
-class Vector:
-    def __init__(self, points):
-        self.GUID = self._add(points)
-
-    def _add(self, points):
-        return rs.VectorCreate(points[0], points[1])
+class VectorObject(Object):
+    def __init__(self, guid):
+        Object.__init__(self, guid)
 
     def isParallelTo(self, vector):
         return rs.IsVectorParallelTo(self.GUID, vector.GUID)
@@ -60,3 +58,10 @@ class Vector:
 
     def unitize(self):
         self.GUID = rs.VectorUnitize(self.GUID)
+
+class Vector(VectorObject):
+    def __init__(self, points):
+        VectorObject.__init__(self, self._add(points))
+
+    def _add(self, points):
+        return rs.VectorCreate(points[0], points[1])

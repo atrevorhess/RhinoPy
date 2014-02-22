@@ -1,18 +1,9 @@
 import rhinoscriptsyntax as rs
 from Object import Object
 
-class Point(Object):
-    def __init__(self, constructor, hidden=False, locked=False, selected=False):
-        self.GUID = constructor if self._isPoint(constructor) else self._add(constructor)
-
-    def __str__(self):
-        return self.coordinates()
-
-    def __repr__(self):
-        return self.GUID
-
-    def _draw(self, coordinate_list):
-        return rs.AddPoint(coordinate_list)
+class PointObject(Object):
+    def __init__(self, guid):
+        Object.__init__(self, guid)
 
     def _isPoint(self, object):
         pass
@@ -22,9 +13,6 @@ class Point(Object):
 
     def coordinates(self, point=None):
         return rs.PointCoordinates(self.GUID, point.GUID)
-
-    def copy(self, translation=None):
-        return Point(rs.CopyObject(self.GUID, translation))
 
     def arrayClosestPoint(self):
         pass
@@ -56,6 +44,21 @@ class Point(Object):
         if rs.IsSurface(projection_object):
             return Point(rs.ProjectPointToMesh(self.GUID, projection_object, direction))
 
-class PolarPoint(Point):
-    def __init__(self, origin=[0, 0, 0], angle_degrees, distance, plane=None, hidden=False, locked=False, selected=False):
-        self.GUID = rs.Polar(origin, angle_degrees, distance, plan=None)
+class Point(PointObject):
+    def __init__(self, coordinates):
+        PointObject.__init__(self, self._add(coordinates))
+
+    def _add(self, coordinates):
+        return rs.AddPoint(coordinates)
+
+class PolarPoint(PointObject):
+    def __init__(self, origin, angle_degrees, distance, plane=None):
+        Point.__init__(self, self._add(origin, angle_degrees, distance, plane))
+
+    def _add(self, origin, angle_degrees, distance, plane=None):
+        return rs.Polar(origin, angle_degrees, distance, plane)
+
+if __name__ == '__main__':
+    pt1 = Point([0, 0, 0])
+    pt2 = pt1.copy([0, 2, 2])
+    pt3 = pt2.copy([0, 0, -4])

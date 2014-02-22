@@ -1,25 +1,16 @@
 import rhinoscriptsyntax as rs
 
 class Object:
-    def __init__(self, guid, hidden=False, locked=False, selected=False):
+    def __init__(self, guid):
         self.GUID = guid
-        #Add commands to hide, lock, or select object is they are passed as true
 
     def __del__(self):
-        self.delete()
+        self._delete()
 
-    def __get__(self):
-        return self.GUID
+
+    def _delete(self):
+        return rs.DeleteObject(self.GUID)
         
-    def __getattr__(self):
-        return self.GUID
-
-    def __repr__(self):
-        return self.GUID
-
-    def __str__(self):
-        return self.GUID
-
     def color(self, color=None):
         return rs.ObjectColor(self.GUID, color)
         
@@ -27,10 +18,7 @@ class Object:
         return rs.ObjectColorSource(self.GUID, source)
 
     def copy(self, translation=None):
-        return rs.CopyObject(self.GUID, translation)
-
-    def delete(self): #Need to delete self when deleting the Object
-        return rs.DeleteObject(self.GUID)
+        return 
 
     def description(self):
         return rs.ObjectDescription(self.GUID)
@@ -92,10 +80,11 @@ class Object:
     def lock(self):
         return rs.LockObject(self.GUID)
     
-    def MatchObjectAttributes(self, source=None):
+    def match(self, source=None):
         return rs.MatchObjectAttributes(self.GUID, source)
 
     def mirror(self, start_point, end_point, copy=False):
+        #return new object if copy=True
         return rs.MirrorObject(self.GUID, start_point, end_point, copy)
         
     def move(self, translation):

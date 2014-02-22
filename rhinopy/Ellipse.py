@@ -1,8 +1,8 @@
 import rhinoscriptsyntax as rs
-from Curve import Curve
-from Point import Point
+from Curve import CurveObject
+from Point import PointObject
 
-class Ellipse(Curve):
+class Ellipse(CurveObject):
     def __init__(self, plane, radius_x, radius_y, hidden=False, locked=False, selected=False):
         self.GUID = self._add(plane, radius_x, radius_y)
 
