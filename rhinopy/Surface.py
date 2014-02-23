@@ -1,16 +1,13 @@
 import rhinoscriptsyntax as rs
 from Curve import Curve
+from Object import Object
 
-
-SrfPt
-SrfPtGrid
+# SrfPt
+# SrfPtGrid
 
 class SurfaceObject(Object):
-    def __init__(self):
+    def __init__(self, guid):
         Object.__init__(self, guid)
-        
-    def __init__(self):
-        self.GUID = self._add()
 
     def _isBrep(self):
         return rs.IsBrep(self.GUID)
@@ -146,7 +143,7 @@ class SurfaceObject(Object):
             return rs.MakeSurfacePeriodic(self.GUID, direction, delete_input)
 
     def offset(self, distance, tolerance=None, both_sides=False, create_solid=False):
-        return Surface(rs.OffsetSurface(self.GUID, distance, tolerance, both_sides, create_solid))
+        return SurfaceObject(rs.OffsetSurface(self.GUID, distance, tolerance, both_sides, create_solid))
 
     """
     Curve Method
@@ -271,88 +268,86 @@ class SurfaceObject(Object):
     def unroll(self, explode=False, following_geometery=None):
         return rs.UnrollSurface(self.GUID, explode, following_geometery)
 
-#Abstract Surface Classes
-
-class Box(Surface):
+class Box(SurfaceObject):
     def __init__(self, corners):
-        self.GUID = self._add(corners)
+        SurfaceObject.__init__(self, self._add(corners))
 
     def _add(self, corners):
         return rs.AddBox(corners)
 
-class Cone(Surface):
+class Cone(SurfaceObject):
     def __init__(self, base, height, radius, cap=True):
-        self.GUID = self._add(base, height, radius, cap)
+        SurfaceObject.__init__(self, self._add(base, height, radius, cap))
 
     def _add(self, base, height, radius, cap=True):
         return rs.AddCone(base, height, radius, cap)
 
-class CutPlane(Surface):
+class CutPlane(SurfaceObject):
     def __init__(self, object_ids, start_point, end_point, normal=None):
-        self.GUID = self._add(object_ids, start_point, end_point, normal)
+        SurfaceObject.__init__(self, self._add(object_ids, start_point, end_point, normal))
 
     def _add(self, object_ids, start_point, end_point, normal=None):
         return rs.AddCupPlane(object_ids, start_point, end_point, normal)
 
-class Cylinder(Surface):
+class Cylinder(SurfaceObject):
     def __init__(self, base, height, radius, cap=True):
-        self.GUID = self._add(base, height, radius, cap)
+        SurfaceObject.__init__(self, self._add(base, height, radius, cap))
 
     def _add(self, base, height, radius, cap=True):
         return rs.AddCylinder(base, height, radius, cap)
 
-class EdgeSrf(Surface):
+class EdgeSrf(SurfaceObject):
     def __init__(self, curves):
-        self.GUID = self._add(curves)
+        SurfaceObject.__init__(self, self._add(curves))
 
     def _add(self, curves):
         return rs.AddEdgeSrf(curves)
 
-class LoftSrf(Surface):
+class LoftSrf(SurfaceObject):
     def __init__(self, object_ids, start=None, end=None, loft_type=0, simplify_method=0, value=0, closed=False):
-        self.GUID = self._add(object_ids, start, end, loft_type, simplify_method, value, closed)
+        SurfaceObject.__init__(self, self._add(object_ids, start, end, loft_type, simplify_method, value, closed))
 
     def _add(self, object_ids, start=None, end=None, loft_type=0, simplify_method=0, value=0, closed=False):
         return rs.AddLoftSrf(object_ids, start, end, loft_type, simplify_method, value, closed)
 
-class NurbsSrf(Surface):
+class NurbsSrf(SurfaceObject):
     def __init__(self, point_count, points, knots_u, knots_v, degree, weights=None):
-        self.GUID = self._add(point_count, points, knots_u, knots_v, degree, weights)
+        SurfaceObject.__init__(self, self._add(point_count, points, knots_u, knots_v, degree, weights))
 
     def _add(self, point_count, points, knots_u, knots_v, degree, weights=None):
         return rs.AddNurbsSurface(point_count, points, knots_u, knots_v, degree, weights)
 
-class Pipe(Surface):
+class Pipe(SurfaceObject):
     def __init__(self, curve_id, parameters, radii, blend_type=0, cap=0, fit=False):
-        self.GUID = self._add(curve_id, parameters, radii, blend_type, cap, fit)
+        SurfaceObject.__init__(self, self._add(curve_id, parameters, radii, blend_type, cap, fit))
 
     def _add(self, curve_id, parameters, radii, blend_type=0, cap=0, fit=False):
         return rs.AddPipe(curve_id, parameters, radii, blend_type, cap, fit)
 
-class PlanarSrf(Surface):
+class PlanarSrf(SurfaceObject):
     def __init__(self, objects):
-        self.GUID = self._add(objects)
+        SurfaceObject.__init__(self, self._add(objects))
 
-    def AddPlanarSrf(self, objects):
+    def _add(self, objects):
         return rs.AddPlanarSrf(objects)
 
-class PlaneSrf(Surface):
+class PlaneSrf(SurfaceObject):
     def __init__(self, plane, u_direction, v_direction):
-        self.GUID = self._add(plane, u_direction, v_direction)
+        SurfaceObject.__init__(self, self._add(plane, u_direction, v_direction))
 
     def _add(self, plane, u_direction, v_direction):
         return rs.AddPlaneSurface(plane, u_direction, v_direction)
 
-class RevSrf(Surface):
+class RevSrf(SurfaceObject):
     def __init__(self, curve_id, axis, start_angle=0.0, end_angle=360.0):
-        self.GUID = self._add(curve_id, axis, start_angle, end_angle)
+        SurfaceObject.__init__(self, self._add(curve_id, axis, start_angle, end_angle))
 
     def _add(self, curve_id, axis, start_angle=0.0, end_angle=360.0):
         return rs.AddRevSrf(curve_id, axis, start_angle, end_angle)
 
-class Sphere(Surface):
+class Sphere(SurfaceObject):
     def __init__(self, center_or_plane, radius):
-        self.GUID = self._add(center_or_plane, radius)
+        SurfaceObject.__init__(self, self._add(center_or_plane, radius))
 
     def _add(self, center_or_plane, radius):
         return rs.AddSphere(center_or_plane, radius)
@@ -361,23 +356,23 @@ class Sphere(Surface):
         pass
 
 #Combine the two sweeps in future revisions
-class Sweep1(Surface):
+class Sweep1(SurfaceObject):
     def __init__(self, rail, shapes, closed=False):
-        self.GUID = self._add(rail, shapes, closed)
+        SurfaceObject.__init__(self, self._add(rail, shapes, closed))
 
     def _add(self, rail, shapes, closed=False):
         return rs.AddSweep1(rail, shapes, closed)
 
-class Sweep2(Surface):
+class Sweep2(SurfaceObject):
     def __init__(self, rails, shapes, closed=False):
-        self.GUID = self._add(rails, shapes, closed)
+        SurfaceObject.__init__(self, self._add(rails, shapes, closed))
 
     def _add(self, rails, shapes, closed=False):
         return rs.AddSweep2(rails, shapes, closed)
 
-class Torus(Surface):
+class Torus(SurfaceObject):
     def __init__(self, base, major_radius, minor_radius, direction=None):
-        self.GUID = self._add(base, major_radius, minor_radius, direction)
+        SurfaceObject.__init__(self, self._add(base, major_radius, minor_radius, direction))
 
     def _add(self, base, major_radius, minor_radius, direction=None):
         return rs.AddTorus(base, major_radius, minor_radius, direction)

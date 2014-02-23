@@ -4,7 +4,7 @@ from Point import PointObject
 
 class Ellipse(CurveObject):
     def __init__(self, plane, radius_x, radius_y, hidden=False, locked=False, selected=False):
-        self.GUID = self._add(plane, radius_x, radius_y)
+        CurveObject.__init__(self, self._add(plane, radius_x, radius_y))
 
     def _add(self, plane, radius_x, radius_y):
         return rs.AddEllipse(plane, radius_x, radius_y)
@@ -13,7 +13,7 @@ class Ellipse(CurveObject):
         return rs.IsEllipse(obj)
 
     def centerPoint(self):
-        return Point(rs.EllipseCenterPoint(self.GUID))
+        return PointObject(rs.EllipseCenterPoint(self.GUID))
 
     def quadPoints(self):
-        return [Point(point) for point in rs.EllipseQuadPoints(self.GUID)]
+        return [PointObject(point) for point in rs.EllipseQuadPoints(self.GUID)]
