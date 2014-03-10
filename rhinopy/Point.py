@@ -23,8 +23,11 @@ class PointObject(Object):
     def compare(self, point, tolerance=None):
         return rs.PointCompare(self.GUID, point.GUID, tolerance)
 
+    def copy(self, translation=None):
+        return PointObject(rs.CopyObject(self.GUID, translation))
+
     def divide(self, divide):
-        self.GUID = Point(rs.PointDivide(self.GUID, divide))
+        self.GUID = PointObject(rs.PointDivide(self.GUID, divide))
 
     def coplanar(self, points, tolerance = 1.0e-12):
         return rs.PointsAreCoplanar(points.append(self.GUID), tolerance)
@@ -33,7 +36,7 @@ class PointObject(Object):
         return Point(rs.MirrorObject(self.GUID, start_point.GUID, end_point.GUID, copy))
 
     def scale(self, scale):
-        self.GUID = Point(rs.PointScale(self.GUID, scale))
+        self.GUID = PointObject(rs.PointScale(self.GUID, scale))
 
     def transform(self, xform):
         self.GUID = rs.PointTranform(self.GUID, xform)

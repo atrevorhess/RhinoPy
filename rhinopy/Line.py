@@ -28,7 +28,6 @@ class LineObject(Object):
         return rs.LineClosestPoint(self.GUID, test_point.GUID)
 
     def copy(self, translation=None):
-        #What code is needed for the copy Object method to return a line
         return Line(rs.CopyObject(self.GUID, translation))
 
     def isFartherThan(self, distance, point_or_line):
